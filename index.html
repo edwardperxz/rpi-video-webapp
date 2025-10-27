@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reproductor de videos - Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Reproductor de videos</h1>
+    <p class="subtitle">Interfaz de demostración ligera para streaming de video</p>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <article class="video-card">
+        <h3>Video musical random</h3>
+        <video controls preload="metadata" tabindex="0">
+          <source src="videos/video1.mp4" type="video/mp4">
+          Tu navegador no soporta la etiqueta <code>video</code>.
+        </video>
+      </article>
+
+      <article class="video-card">
+        <h3>The Marias - Lejos de Ti</h3>
+        <video controls preload="metadata">
+          <source src="videos/video2.mp4" type="video/mp4">
+          Tu navegador no soporta la etiqueta <code>video</code>.
+        </video>
+      </article>
+
+      <article class="video-card">
+        <h3>Samy y Sandra Sandoval (Video) - Para que Seguir Amando</h3>
+        <video controls preload="metadata">
+          <source src="videos/video3.mp4" type="video/mp4">
+          Tu navegador no soporta la etiqueta <code>video</code>.
+        </video>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="made-by">Desarrollado por <strong>Los Cheveronazos</strong> · Redes Computacionales · Universidad Tecnológica de Panamá</p>
+    </div>
+  </footer>
+</body>
+</html>
