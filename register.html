@@ -60,9 +60,11 @@
     (function(){
       const form = document.getElementById('registerForm');
       const msg = document.getElementById('formMsg');
+      const API_BASE = 'http://192.168.33.13:3000';
 
-      form.addEventListener('submit', function(e){
+      form.addEventListener('submit', async function(e){
         e.preventDefault();
+        msg.textContent = '';
         
         const data = {
           username: document.getElementById('username').value.trim(),
@@ -71,14 +73,34 @@
           lastName: document.getElementById('lastName').value.trim()
         };
 
-        // Guardar en localStorage
+        // Guardar en localStorage primero para asegurar acceso local
         localStorage.setItem('rpi_registered', '1');
         localStorage.setItem('rpi_user', data.username);
         localStorage.setItem('rpi_firstName', data.firstName);
         localStorage.setItem('rpi_lastName', data.lastName);
-        
-        // Redirigir a la página principal
-        window.location.href = 'index.html';
+
+        // Intentar enviar al servidor en segundo plano
+        try {
+          const res = await fetch(API_BASE + '/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          if (res.ok) {
+            msg.textContent = 'Registro exitoso en servidor y local';
+          } else {
+            msg.textContent = 'Registro local guardado. Servidor no disponible.';
+          }
+        } catch(err) {
+          console.warn('No se pudo conectar al servidor:', err);
+          msg.textContent = 'Registro local guardado. Servidor no disponible.';
+        }
+
+        // Esperar un momento para mostrar el mensaje
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
       });
     })();
   </script>
