@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reproductor - RPi Video WebApp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <div class="brand">
+        <a href="index.html" class="back-button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Volver
+        </a>
+        <h1>Reproductor</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="video-player-page">
+    <div class="video-container">
+      <video id="player" controls playsinline autoplay>
+        Tu navegador no soporta video.
+      </video>
+    </div>
+    
+    <div class="video-info">
+      <h1 id="videoTitle">Reproduciendo</h1>
+    </div>
+  </main>
+
+  <style>
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .back-button:hover {
+      background: var(--surface);
+      color: var(--accent);
+    }
+  </style>
+
+  <style>
+    .video-player-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .video-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 16/9;
+    }
+    
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .video-info {
+      max-width: 800px;
+      margin: 1.5rem auto 0;
+      padding: 1rem;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    
+    .video-info h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    
+    .video-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+  </style>
+
+  <script>
+    (function(){
+      function qs(name){
+        const params = new URLSearchParams(location.search);
+        return params.get(name);
+      }
+
+      const videoPath = qs('video');
+      const title = qs('title') ? decodeURIComponent(qs('title')) : 'Reproduciendo';
+      const player = document.getElementById('player');
+      const titleEl = document.getElementById('videoTitle');
+
+      titleEl.textContent = title;
+
+      if (!videoPath){
+        titleEl.textContent = 'Video no especificado';
+        return;
+      }
+
+      // establecer fuente
+      const source = document.createElement('source');
+      source.src = videoPath;
+      source.type = 'video/mp4';
+      player.appendChild(source);
+
+      // Reproducción automática y silenciosa
+      player.muted = true;
+
+      // Escuchar eventos para mejorar accesibilidad/estado y depuración
+      player.addEventListener('ended', () => {
+        // al terminar, dejar el video pausado
+      });
+
+      // Agregar listeners para depuración
+      player.addEventListener('error', (e) => {
+        console.error('Error en el video:', e);
+        titleEl.textContent = 'Error al cargar el video: ' + videoPath;
+      });
+
+      player.addEventListener('loadeddata', () => {
+        console.log('Video cargado exitosamente');
+      });
+
+      // Mostrar la ruta del video para depuración
+      console.log('Intentando cargar video desde:', videoPath);
+    })();
+  </script>
+</body>
+</html>

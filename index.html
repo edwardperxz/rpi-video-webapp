@@ -7,36 +7,53 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Validación de registro removida para testing -->
   <header class="site-header">
-    <h1>Reproductor de videos</h1>
-    <p class="subtitle">Interfaz de demostración ligera para streaming de video</p>
+    <div class="inner">
+      <h1>Reproductor de videos</h1>
+      <nav style="margin-top:0.5rem">
+        <a href="account.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;margin-right:1rem;">Mi cuenta</a>
+        <a href="register.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;">Registrarse / Iniciar</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="grid">
+    <main class="container">
+    <section class="grid" aria-label="Listado de videos">
+
       <article class="video-card">
-        <h3>Video musical random</h3>
-        <video controls preload="metadata" tabindex="0">
-          <source src="videos/video1.mp4" type="video/mp4">
-          Tu navegador no soporta la etiqueta <code>video</code>.
-        </video>
+        <a class="thumb" href="watch.html?video=videos/video1.mp4&title=Video%20musical%20random" aria-label="Ver Video musical random">
+          <video muted preload="metadata" playsinline>
+            <source src="videos/video1.mp4" type="video/mp4">
+          </video>
+        </a>
+        <div class="meta">
+          <h3><a href="watch.html?video=videos/video1.mp4&title=Video%20musical%20random">Video musical random</a></h3>
+        </div>
       </article>
 
       <article class="video-card">
-        <h3>The Marias - Lejos de Ti</h3>
-        <video controls preload="metadata">
-          <source src="videos/video2.mp4" type="video/mp4">
-          Tu navegador no soporta la etiqueta <code>video</code>.
-        </video>
+        <a class="thumb" href="watch.html?video=videos/video2.mp4&title=The%20Marias%20-%20Lejos%20de%20Ti" aria-label="Ver The Marias - Lejos de Ti">
+          <video muted preload="metadata" playsinline>
+            <source src="videos/video2.mp4" type="video/mp4">
+          </video>
+        </a>
+        <div class="meta">
+          <h3><a href="watch.html?video=videos/video2.mp4&title=The%20Marias%20-%20Lejos%20de%20Ti">The Marias - Lejos de Ti</a></h3>
+        </div>
       </article>
 
       <article class="video-card">
-        <h3>Samy y Sandra Sandoval (Video) - Para que Seguir Amando</h3>
-        <video controls preload="metadata">
-          <source src="videos/video3.mp4" type="video/mp4">
-          Tu navegador no soporta la etiqueta <code>video</code>.
-        </video>
+        <a class="thumb" href="watch.html?video=videos/video3.mp4&title=Samy%20y%20Sandra%20Sandoval%20-%20Para%20que%20Seguir%20Amando" aria-label="Ver Samy y Sandra Sandoval - Para que Seguir Amando">
+          <video muted preload="metadata" playsinline>
+            <source src="videos/video3.mp4" type="video/mp4">
+          </video>
+        </a>
+        <div class="meta">
+          <h3><a href="watch.html?video=videos/video3.mp4&title=Samy%20y%20Sandra%20Sandoval%20-%20Para%20que%20Seguir%20Amando">Samy y Sandra Sandoval - Para que Seguir Amando</a></h3>
+        </div>
       </article>
+
     </section>
   </main>
 

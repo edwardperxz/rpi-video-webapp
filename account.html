@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi cuenta - RPi Video WebApp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <h1>Mi cuenta</h1>
+      <p class="subtitle">Información de la cuenta registrada</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="register-container" id="accountCard">
+      <h2>Datos del usuario</h2>
+      <div id="accountInfo" style="display:block;">
+        <p><strong>Usuario:</strong> <span id="accUser">-</span></p>
+        <p><strong>Nombre:</strong> <span id="accFirst">-</span></p>
+        <p><strong>Apellido:</strong> <span id="accLast">-</span></p>
+      </div>
+
+      <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+        <a class="btn secondary" href="index.html">Volver a la interfaz</a>
+        <button id="logoutBtn" class="btn">Cerrar sesión</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      // Leer datos desde localStorage
+      const user = localStorage.getItem('rpi_user');
+      const first = localStorage.getItem('rpi_firstName');
+      const last = localStorage.getItem('rpi_lastName');
+
+      const accUser = document.getElementById('accUser');
+      const accFirst = document.getElementById('accFirst');
+      const accLast = document.getElementById('accLast');
+
+      if (user) accUser.textContent = user; else accUser.textContent = '-';
+      if (first) accFirst.textContent = first; else accFirst.textContent = '-';
+      if (last) accLast.textContent = last; else accLast.textContent = '-';
+
+      // Validación de registro removida para testing
+
+      document.getElementById('logoutBtn').addEventListener('click', function(){
+        // limpiar datos locales y volver al registro
+        try{ localStorage.removeItem('rpi_registered'); }catch(e){}
+        try{ localStorage.removeItem('rpi_user'); }catch(e){}
+        try{ localStorage.removeItem('rpi_firstName'); }catch(e){}
+        try{ localStorage.removeItem('rpi_lastName'); }catch(e){}
+        window.location.href = 'register.html';
+      });
+    })();
+  </script>
+</body>
+</html>
