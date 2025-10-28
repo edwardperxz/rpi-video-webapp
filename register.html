@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Registro - RPi Video WebApp</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <header class="site-header">
     <div class="inner">
@@ -48,7 +50,7 @@
         </div>
 
         <p id="formMsg" class="form-note" aria-live="polite"></p>
-        
+
         <div class="form-footer">
           <p>¿Ya tienes acceso? <a href="index.html">Ver videos</a></p>
         </div>
@@ -57,15 +59,15 @@
   </main>
 
   <script>
-    (function(){
+    (function () {
       const form = document.getElementById('registerForm');
       const msg = document.getElementById('formMsg');
-      const API_BASE = 'http://192.168.33.13:3000';
+      const API_BASE = 'http://localhost:3000';
 
-      form.addEventListener('submit', async function(e){
+      form.addEventListener('submit', async function (e) {
         e.preventDefault();
         msg.textContent = '';
-        
+
         const data = {
           username: document.getElementById('username').value.trim(),
           password: document.getElementById('password').value,
@@ -92,7 +94,7 @@
           } else {
             msg.textContent = 'Registro local guardado. Servidor no disponible.';
           }
-        } catch(err) {
+        } catch (err) {
           console.warn('No se pudo conectar al servidor:', err);
           msg.textContent = 'Registro local guardado. Servidor no disponible.';
         }
@@ -105,4 +107,5 @@
     })();
   </script>
 </body>
+
 </html>

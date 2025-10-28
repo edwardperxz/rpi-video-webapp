@@ -1,0 +1,13 @@
+{
+  "name": "rpi-video-webapp",
+  "version": "1.0.0",
+  "description": "Video streaming webapp with Raspberry Pi system monitoring",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^4.21.2"
+  }
+}
