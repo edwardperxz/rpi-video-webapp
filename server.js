@@ -1,12 +1,10 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 const system = require('./lib/system.js');
 
 const app = express();
 const port = 3000;
 
-// Serve static files from the current directory
 app.use(express.static(__dirname));
 
 // middleware para recibir formularios y JSON
@@ -30,6 +28,6 @@ app.post('/register', (req, res) => {
     res.status(200).send('✅ Credenciales recibidas correctamente');
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running at http://0.0.0.0:${port}`);
 });

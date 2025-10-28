@@ -62,7 +62,6 @@
     (function () {
       const form = document.getElementById('registerForm');
       const msg = document.getElementById('formMsg');
-      const API_BASE = 'http://localhost:3000';
 
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -83,7 +82,7 @@
 
         // Intentar enviar al servidor en segundo plano
         try {
-          const res = await fetch(API_BASE + '/register', {
+          const res = await fetch('/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
