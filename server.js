@@ -104,19 +104,15 @@ async function getInstalledServices() {
             await execPromise(service.command, { timeout: 5000 });
             results.push({
                 name: service.name,
-                status: 'running',
-                installed: true
+                status: 'running'
             });
         } catch (err) {
-            // Si falla, el servicio no está instalado o no está disponible
             results.push({
                 name: service.name,
-                status: 'inactive',
-                installed: false
+                status: 'inactive'
             });
         }
     }
-
     return results;
 }
 
