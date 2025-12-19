@@ -19,43 +19,51 @@
   </header>
 
     <main class="container">
-    <section class="grid" aria-label="Listado de videos">
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video1.mp4&title=Video%20musical%20random" aria-label="Ver Video musical random">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video1.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video1.mp4&title=Video%20musical%20random">Video musical random</a></h3>
-        </div>
-      </article>
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video2.mp4&title=The%20Marias%20-%20Lejos%20de%20Ti" aria-label="Ver The Marias - Lejos de Ti">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video2.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video2.mp4&title=The%20Marias%20-%20Lejos%20de%20Ti">The Marias - Lejos de Ti</a></h3>
-        </div>
-      </article>
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video3.mp4&title=Samy%20y%20Sandra%20Sandoval%20-%20Para%20que%20Seguir%20Amando" aria-label="Ver Samy y Sandra Sandoval - Para que Seguir Amando">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video3.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video3.mp4&title=Samy%20y%20Sandra%20Sandoval%20-%20Para%20que%20Seguir%20Amando">Samy y Sandra Sandoval - Para que Seguir Amando</a></h3>
-        </div>
-      </article>
-
+    <section class="grid" aria-label="Listado de videos" id="videos-grid">
+      <!-- Videos will be loaded dynamically here -->
     </section>
   </main>
+
+  <script>
+    async function loadVideos() {
+      try {
+        const response = await fetch('/api/videos');
+        if (!response.ok) {
+          throw new Error('Failed to fetch videos');
+        }
+        const videos = await response.json();
+        const grid = document.getElementById('videos-grid');
+
+        if (videos.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">No hay videos disponibles</p>';
+          return;
+        }
+        grid.innerHTML = videos.map(video => {
+          const encodedPath = encodeURIComponent(video.path);
+          const encodedTitle = encodeURIComponent(video.title);
+          const watchUrl = `watch.html?video=${encodedPath}&title=${encodedTitle}`;
+          return `
+            <article class="video-card">
+              <a class="thumb" href="${watchUrl}" aria-label="Ver ${video.title}">
+                <video muted preload="metadata" playsinline>
+                  <source src="${video.path}" type="video/mp4">
+                </video>
+              </a>
+              <div class="meta">
+                <h3><a href="${watchUrl}">${video.title}</a></h3>
+              </div>
+            </article>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        const grid = document.getElementById('videos-grid');
+        grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--error, #ff4444);">Error al cargar los videos</p>';
+      }
+    }
+    // Load videos when page loads
+    document.addEventListener('DOMContentLoaded', loadVideos);
+  </script>
 
   <footer class="site-footer">
     <div class="footer-inner">

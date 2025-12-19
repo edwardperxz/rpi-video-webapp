@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const os = require('os');
+const fs = require('fs').promises;
+const path = require('path');
 const system = require('./lib/system.js');
 const { exec } = require('child_process');
 const { promisify } = require('util');
@@ -24,6 +26,33 @@ app.get('/api/status', async (req, res) => {
     } catch (error) {
         console.error('Error getting status data:', error);
         res.status(500).json({ error: 'Failed to get status data' });
+    }
+});
+
+// API endpoint for listing videos
+app.get('/api/videos', async (req, res) => {
+    try {
+        const videosDir = path.join(__dirname, 'videos');
+        const files = await fs.readdir(videosDir);
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+        const videoFiles = files
+            .filter(file => {
+                const ext = path.extname(file).toLowerCase();
+                return videoExtensions.includes(ext);
+            })
+            .map(file => {
+                const videoPath = `videos/${file}`;
+                const title = path.basename(file, path.extname(file));
+                return {
+                    filename: file,
+                    path: videoPath,
+                    title: title
+                };
+            });
+        res.json(videoFiles);
+    } catch (error) {
+        console.error('Error reading videos directory:', error);
+        res.status(500).json({ error: 'Failed to read videos directory' });
     }
 });
 
