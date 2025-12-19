@@ -45,7 +45,7 @@
           return `
             <article class="video-card">
               <a class="thumb" href="${watchUrl}" aria-label="Ver ${video.title}">
-                <video muted preload="metadata" playsinline>
+                <video preload="metadata" playsinline>
                   <source src="${video.path}" type="video/mp4">
                 </video>
               </a>
@@ -55,6 +55,26 @@
             </article>
           `;
         }).join('');
+        
+        // Set up thumbnail display for all video elements
+        const videoElements = grid.querySelectorAll('video');
+        videoElements.forEach(video => {
+          video.pause();
+          
+          const showThumbnail = () => {
+            video.currentTime = 0;
+          };
+          
+          video.addEventListener('loadedmetadata', showThumbnail);
+          
+          video.addEventListener('seeked', () => {
+            video.pause();
+          });
+          
+          if (video.readyState >= 1) {
+            showThumbnail();
+          }
+        });
       } catch (error) {
         console.error('Error loading videos:', error);
         const grid = document.getElementById('videos-grid');
