@@ -14,6 +14,7 @@
       <nav style="margin-top:0.5rem">
         <a href="account.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;margin-right:1rem;">Mi cuenta</a>
         <a href="register.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;">Registrarse / Iniciar</a>
+        <a href="status.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;">Estado del sistema</a>
       </nav>
     </div>
   </header>
@@ -38,7 +39,14 @@
           grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">No hay videos disponibles</p>';
           return;
         }
-        grid.innerHTML = videos.map(video => {
+        
+        const shuffledVideos = [...videos];
+        for (let i = shuffledVideos.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledVideos[i], shuffledVideos[j]] = [shuffledVideos[j], shuffledVideos[i]];
+        }
+        
+        grid.innerHTML = shuffledVideos.map(video => {
           const encodedPath = encodeURIComponent(video.path);
           const encodedTitle = encodeURIComponent(video.title);
           const watchUrl = `watch.html?video=${encodedPath}&title=${encodedTitle}`;
@@ -62,7 +70,7 @@
           video.pause();
           
           const showThumbnail = () => {
-            video.currentTime = 0;
+            video.currentTime = video.duration / 2;
           };
           
           video.addEventListener('loadedmetadata', showThumbnail);
