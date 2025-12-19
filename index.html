@@ -14,48 +14,84 @@
       <nav style="margin-top:0.5rem">
         <a href="account.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;margin-right:1rem;">Mi cuenta</a>
         <a href="register.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;">Registrarse / Iniciar</a>
+        <a href="status.html" style="color:rgba(255,255,255,0.95);text-decoration:underline;">Estado del sistema</a>
       </nav>
     </div>
   </header>
 
     <main class="container">
-    <section class="grid" aria-label="Listado de videos">
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video1.mp4&title=Ver%20Lady%20Gaga%2C%20Bruno%20Mars%20-%20Die%20With%20A%20Smile%20(Official%20Music%20Video)" aria-label="Ver Lady Gaga, Bruno Mars - Die With A Smile (Official Music Video)">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video1.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video1.mp4&title=Ver%20Lady%20Gaga%2C%20Bruno%20Mars%20-%20Die%20With%20A%20Smile%20(Official%20Music%20Video)">Ver Lady Gaga, Bruno Mars - Die With A Smile (Official Music Video)</a></h3>
-        </div>
-      </article>
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video2.mp4&title=Ver%20The%20Marias%20-%20Lejos%20de%20Ti" aria-label="Ver The Marias - Lejos de Ti">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video2.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video2.mp4&title=Ver%20The%20Marias%20-%20Lejos%20de%20Ti">Ver The Marias - Lejos de Ti</a></h3>
-        </div>
-      </article>
-
-      <article class="video-card">
-        <a class="thumb" href="watch.html?video=videos/video3.mp4&title=Ver%20Hozier%20-%20Too%20Sweet%20(Official%20Lyric%20Video)" aria-label="Ver Hozier - Too Sweet (Official Lyric Video)">
-          <video muted preload="metadata" playsinline>
-            <source src="videos/video3.mp4" type="video/mp4">
-          </video>
-        </a>
-        <div class="meta">
-          <h3><a href="watch.html?video=videos/video3.mp4&title=Ver%20Hozier%20-%20Too%20Sweet%20(Official%20Lyric%20Video)">Ver Hozier - Too Sweet (Official Lyric Video)</a></h3>
-        </div>
-      </article>
-
+    <section class="grid" aria-label="Listado de videos" id="videos-grid">
+      <!-- Videos will be loaded dynamically here -->
     </section>
   </main>
+
+  <script>
+    async function loadVideos() {
+      try {
+        const response = await fetch('/api/videos');
+        if (!response.ok) {
+          throw new Error('Failed to fetch videos');
+        }
+        const videos = await response.json();
+        const grid = document.getElementById('videos-grid');
+
+        if (videos.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted);">No hay videos disponibles</p>';
+          return;
+        }
+        
+        const shuffledVideos = [...videos];
+        for (let i = shuffledVideos.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledVideos[i], shuffledVideos[j]] = [shuffledVideos[j], shuffledVideos[i]];
+        }
+        
+        grid.innerHTML = shuffledVideos.map(video => {
+          const encodedPath = encodeURIComponent(video.path);
+          const encodedTitle = encodeURIComponent(video.title);
+          const watchUrl = `watch.html?video=${encodedPath}&title=${encodedTitle}`;
+          return `
+            <article class="video-card">
+              <a class="thumb" href="${watchUrl}" aria-label="Ver ${video.title}">
+                <video preload="metadata" playsinline>
+                  <source src="${video.path}" type="video/mp4">
+                </video>
+              </a>
+              <div class="meta">
+                <h3><a href="${watchUrl}">${video.title}</a></h3>
+              </div>
+            </article>
+          `;
+        }).join('');
+        
+        // Set up thumbnail display for all video elements
+        const videoElements = grid.querySelectorAll('video');
+        videoElements.forEach(video => {
+          video.pause();
+          
+          const showThumbnail = () => {
+            video.currentTime = video.duration / 2;
+          };
+          
+          video.addEventListener('loadedmetadata', showThumbnail);
+          
+          video.addEventListener('seeked', () => {
+            video.pause();
+          });
+          
+          if (video.readyState >= 1) {
+            showThumbnail();
+          }
+        });
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        const grid = document.getElementById('videos-grid');
+        grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--error, #ff4444);">Error al cargar los videos</p>';
+      }
+    }
+    // Load videos when page loads
+    document.addEventListener('DOMContentLoaded', loadVideos);
+  </script>
 
   <footer class="site-footer">
     <div class="footer-inner">
